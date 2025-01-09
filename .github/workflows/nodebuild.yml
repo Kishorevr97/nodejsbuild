@@ -1,0 +1,21 @@
+name: node based workflow
+run-name: node workflow
+on:
+ push
+jobs:
+ echo-triggers:
+  runs-on: ubuntu-latest
+  steps:
+   - name: checkout
+     uses: actions/checkout@v3
+     
+   - name: nodejssetup
+     uses: actions/setup-node@v4.1.0
+     with:
+       node-version: '16'
+   - run: npm install
+   - run: npm run build
+   - uses: actions/upload-artifact@v4.6.0
+     with:
+      name: Package
+      path: build/
