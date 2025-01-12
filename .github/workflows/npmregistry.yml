@@ -1,0 +1,29 @@
+name: npm registry workflow
+run-name: npm workflow
+on:
+ push
+jobs:
+ echo-triggers:
+  runs-on: ubuntu-latest
+  steps:
+   - name: checkout
+     uses: actions/checkout@v3
+     
+   - name: nodejssetup
+     uses: actions/setup-node@v4.1.0
+     with:
+       node-version: '16'
+   - name: install dependencies
+     run: npm install
+     
+   - name: Build Package
+     run: npm run build
+
+   - name: Authenticate with npm
+     run: npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+     env:
+       NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+   - name: publish to npm
+     run: npm publish
+     env:
+       NODE_AUTH_TOKEN: ${{secrets.NPM_token}}
